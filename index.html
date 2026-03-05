@@ -18,11 +18,29 @@
         #callBtn:disabled { background: #ccc; }
         #hangupBtn { background: #f44336; color: white; display: none; }
         .timer { text-align: center; font-size: 24px; color: #666; margin: 20px 0; }
+        .number-select { margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px; }
+        .number-select label { display: block; margin-bottom: 10px; font-weight: bold; color: #333; }
+        .number-option { display: flex; align-items: center; padding: 10px; margin: 5px 0; background: white; border-radius: 6px; cursor: pointer; transition: 0.2s; border: 2px solid transparent; }
+        .number-option:hover { background: #f0f0f0; }
+        .number-option.selected { border-color: #4caf50; background: #e8f5e9; }
+        .number-option input { margin-right: 12px; }
+        .number-option span { font-size: 16px; color: #333; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🎧 Realcall Test Dialer</h1>
+        <div class="number-select">
+            <label>选择要拨打的号码：</label>
+            <label class="number-option selected" onclick="selectNumber(this, '+18444913441')">
+                <input type="radio" name="phone" checked>
+                <span>360dmmc +1 844 491 3441</span>
+            </label>
+            <label class="number-option" onclick="selectNumber(this, '+18665131132')">
+                <input type="radio" name="phone">
+                <span>aplus +1 866 513 1132</span>
+            </label>
+        </div>
         <div id="status" class="status ready">准备就绪</div>
         <div class="timer" id="timer">00:00</div>
         <button id="callBtn" onclick="initAndCall()">获取 Token 并呼叫</button>
@@ -31,11 +49,18 @@
 
     <script>
         const TOKEN_URL = 'https://chi-360dmmc.app.n8n.cloud/webhook/twilio-token';
-        const TARGET_NUMBER = '+18444913441';
         
         let device = null;
         let activeCall = null;
         let timerInterval = null;
+        let TARGET_NUMBER = '+18444913441';
+
+        function selectNumber(element, number) {
+            TARGET_NUMBER = number;
+            document.querySelectorAll('.number-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            element.querySelector('input').checked = true;
+        }
 
         async function initAndCall() {
             const statusEl = document.getElementById('status');

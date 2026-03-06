@@ -60,11 +60,6 @@
         function selectNumber(element, number, tokenUrl) {
             TARGET_NUMBER = number;
             TOKEN_URL = tokenUrl;
-            // 如果已有设备，需要重置以便下次呼叫时使用新的 token URL
-            if (device) {
-                device.unregister();
-                device = null;
-            }
             document.querySelectorAll('.number-option').forEach(opt => opt.classList.remove('selected'));
             element.classList.add('selected');
             element.querySelector('input').checked = true;
